@@ -1,12 +1,30 @@
 # korbit-python
 
 korbit API wrapper for Python
+You can get detail of API in [API Reference](https://apidocs.korbit.co.kr/)
+
+## Basic Usage
+You can use public API very easily.
+```python
+import korbit
+ticker = korbit.ticker()
+```
+
+## If you want to use Exchange
+You have to get API key in [this page](https://www.korbit.co.kr/settings/api)
+```python
+import korbit
+api = korbit.privateAPI('your key', 'your secret')
+api.create_token_dircetly('your email', 'your pa$$w0rd')
+
+api.market_ask_order(0.01)
+```
 
 
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2016 HoonJin(Daniel) Ji
+Copyright (c) 2016 HoonJin(Daniel) Ji bwjhj1030@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
