@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 try:
     from setuptools import setup
 except ImportError:
@@ -6,12 +6,19 @@ except ImportError:
 
 setup(
     name='korbit',
-    version='0.1',
+    packages=['korbit'],
+    version='0.1.0',
     description='korbit API wrapper for Python',
     url='http://github.com/Hoonjin/korbit-python/',
     author='Daniel Ji',
     author_email='bwjhj1030@gmail.com',
-    license='MIT',
     install_requires=['requests'],
-    packages=['korbit'],
+    classifiers=[
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Software Development :: Libraries :: Python Modules"
+    ],
+    license='MIT',
 )

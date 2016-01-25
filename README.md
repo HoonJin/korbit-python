@@ -1,13 +1,14 @@
 # korbit-python
 
-korbit API wrapper for Python
-You can get detail of API in [API Reference](https://apidocs.korbit.co.kr/)
+## korbit API wrapper for Python
+
+You can get detail information of API in [API Reference](https://apidocs.korbit.co.kr/)
 
 ## Basic Usage
 You can use public API very easily.
 ```python
 import korbit
-ticker = korbit.ticker()
+korbit.ticker()
 ```
 
 ## If you want to use Exchange
