@@ -5,7 +5,7 @@ except ImportError:
     from distutils.core import setup
 
 setup(
-    name='korbit',
+    name='korbit-api',
     packages=['korbit'],
     version='0.1.0',
     description='korbit API wrapper for Python',

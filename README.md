@@ -1,8 +1,13 @@
-# korbit-python
-
-## korbit API wrapper for Python
+# korbit API wrapper for Python
 
 You can get detail information of API in [API Reference](https://apidocs.korbit.co.kr/)
+
+
+## Installation
+Install from PyPI
+```sh
+pip install korbit-api
+```
 
 ## Basic Usage
 You can use public API very easily.
