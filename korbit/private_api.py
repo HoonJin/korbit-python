@@ -10,7 +10,10 @@ except ImportError:
 
 class PrivateAPI(PublicAPI):
     def __init__(self, client_id, secret, production=True, version="v1"):
-        super(self.__class__, self).__init__(production, version)
+        try:
+            super(self.__class__, self).__init__(production, version)
+        except TypeError:
+            PublicAPI.__init__(self, production, version)
         self.__client_id = client_id
         self.__secret = secret
         self.__token = {}
