@@ -111,52 +111,6 @@ class PrivateAPI(PublicAPI):
         response = requests.get(urljoin(self.host, "user/transactions"), params=self.nonce_params, headers=self.headers)
         return response.json()
 
-    # https://apidocs.korbit.co.kr/#fiat
-    def assign_virtual_bank_account(self, currency="krw"):
-        payload = {
-            'currency': currency,
-            'nonce': self.nonce
-        }
-        response = requests.post(urljoin(self.host, "user/fiats/address/assign"), data=payload, headers=self.headers)
-        return response.json()
-
-    def register_user_bank_account(self, bank, account, currency="krw"):
-        # https://s3.amazonaws.com/korbit.api/bank-names-ko-1.0.0.json
-        payload = {
-            'currency': currency,
-            'bank': bank,
-            'account': account,
-            'nonce': self.nonce
-        }
-        response = requests.post(urljoin(self.host, "user/fiats/address/register"), data=payload, headers=self.headers)
-        return response.json()
-
-    def request_withdrawal(self, amount, currency="krw"):
-        payload = {
-            'currency': currency,
-            'amount': amount,
-            'nonce': self.nonce
-        }
-        response = requests.post(urljoin(self.host, "user/fiats/out"), data=payload, headers=self.headers)
-        return response.json()
-
-    def state_of_withdrawal_requests(self, currency="krw"):
-        params = {
-            'currency': currency,
-            'nonce': self.nonce
-        }
-        response = requests.get(urljoin(self.host, "user/fiats/status"), params=params, headers=self.headers)
-        return response.json()
-
-    def cancel_withdrawal_request(self, fiat_out_id, currency="krw"):
-        payload = {
-            'currency': currency,
-            'id': fiat_out_id,
-            'nonce': self.nonce
-        }
-        response = requests.post(urljoin(self.host, "user/fiats/out/cancel"), data=payload, headers=self.headers)
-        return response.json()
-
     # https://apidocs.korbit.co.kr/#wallet
     def retrieve_wallet_status(self):
         response = requests.get(urljoin(self.host, "user/wallet"), params=self.nonce_params, headers=self.headers)
