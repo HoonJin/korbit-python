@@ -9,6 +9,3 @@ class TestKorbit(unittest.TestCase):
         ticker = korbit.ticker()
         self.assertTrue('last' in ticker.keys())
         self.assertTrue('timestamp' in ticker.keys())
-
-if __name__ == '__main__':
-    unittest.main()
