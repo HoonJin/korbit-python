@@ -7,6 +7,8 @@ try:
 except ImportError:
     from urlparse import urljoin
 
+TIMEOUT = 5
+
 
 class PublicAPI:
     def __init__(self, production=True, version="v1"):
@@ -14,34 +16,30 @@ class PublicAPI:
                       or "https://api.korbit-test.com/%s/" % version
 
     # https://apidocs.korbit.co.kr/#public
-    def ticker(self, currency_pair='btc_krw'):
+    def ticker(self, currency_pair="btc_krw"):
         params = {
             'currency_pair': currency_pair
         }
-        response = requests.get(urljoin(self.host, "ticker"), params=params)
-        return response.json()
+        return self.request_get("ticker", params=params)
 
-    def detailed_ticker(self, currency_pair='btc_krw'):
+    def detailed_ticker(self, currency_pair="btc_krw"):
         params = {
             'currency_pair': currency_pair
         }
-        response = requests.get(urljoin(self.host, "ticker/detailed"), params=params)
-        print(response.url)
-        return response.json()
+        return self.request_get("ticker/detailed", params=params)
 
-    def orderbook(self, currency_pair='btc_krw', category="all", group=True):
+    def orderbook(self, currency_pair="btc_krw", category="all", group=True):
         params = {
             'group': group,
             'category': category,
             'currency_pair': currency_pair
         }
-        response = requests.get(urljoin(self.host, "orderbook"), params=params)
-        return response.json()
+        return self.request_get("orderbook", params=params)
 
-    def bids_orderbook(self, currency_pair='btc_krw', group=True):
+    def bids_orderbook(self, currency_pair="btc_krw", group=True):
         return self.orderbook(currency_pair=currency_pair, category="bid", group=group)
 
-    def asks_orderbook(self, currency_pair='btc_krw', group=True):
+    def asks_orderbook(self, currency_pair="btc_krw", group=True):
         return self.orderbook(currency_pair=currency_pair, category="ask", group=group)
 
     def list_of_filled_orders(self, currency_pair="btc_krw", interval="hour"):
@@ -49,12 +47,17 @@ class PublicAPI:
             'time': interval,
             'currency_pair': currency_pair
         }
-        response = requests.get(urljoin(self.host, "transactions"), params=params)
-        print(response.url)
-        return response.json()
+        return self.request_get("transactions", params=params)
 
     def constants(self):
-        response = requests.get(urljoin(self.host, "constants"))
+        return self.request_get("constants")
+
+    def request_get(self, path, headers=None, params=None):
+        response = requests.get(urljoin(self.host, path), headers=headers, params=params, timeout=TIMEOUT)
+        return response.json()
+
+    def request_post(self, path, headers=None, data=None):
+        response = requests.post(urljoin(self.host, path), headers=headers, data=data, timeout=TIMEOUT)
         return response.json()
 
     @property
@@ -64,9 +67,3 @@ class PublicAPI:
     @property
     def nonce(self):
         return int(time.time() * 1000)
-
-    @property
-    def nonce_params(self):
-        return {
-            'nonce': self.nonce
-        }

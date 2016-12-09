@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from .public_api import PublicAPI
-import requests
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
 
 
 class PrivateAPI(PublicAPI):
@@ -27,9 +22,7 @@ class PrivateAPI(PublicAPI):
             'password': password,
             'grant_type': "password"
         }
-        response = requests.post(urljoin(self.host, "oauth2/access_token"), data=payload)
-
-        self.__token = response.json()
+        self.__token = self.request_post("oauth2/access_token", data=payload)
         return self.__token
 
     def refresh_token(self):
@@ -39,14 +32,14 @@ class PrivateAPI(PublicAPI):
             'refresh_token': self.__token['refresh_token'],
             'grant_type': "refresh_token"
         }
-        response = requests.post(urljoin(self.host, "oauth2/access_token"), data=payload)
-
-        self.__token = response.json()
+        self.__token = self.request_post("oauth2/access_token", data=payload)
         return self.__token
 
     def get_user_info(self):
-        response = requests.get(urljoin(self.host, "user/info"), params=self.nonce_params, headers=self.headers)
-        return response.json()
+        params = {
+            'nonce': self.nonce
+        }
+        return self.request_get("user/info", headers=self.headers, params=params)
 
     @property
     def headers(self):
@@ -56,46 +49,46 @@ class PrivateAPI(PublicAPI):
         }
 
     # https://apidocs.korbit.co.kr/#exchange
-    def bid_order(self, bid_type, coin_amount=0, price=0, fiat_amount=0):
+    def bid_order(self, bid_type, coin_amount=None, price=None, fiat_amount=None, currency_pair="btc_krw"):
         payload = {
             'type': bid_type,
+            'currency_pair': currency_pair,
             'price': price,
             'coin_amount': coin_amount,
             'fiat_amount': fiat_amount,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/orders/buy"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/orders/buy", headers=self.headers, data=payload)
 
     def market_bid_order(self, fiat_amount):
-        return self.bid_order('market', fiat_amount=fiat_amount)
+        return self.bid_order('market', fiat_amount=fiat_amount, currency_pair="btc_krw")
 
     def limit_bid_order(self, coin_amount, price):
-        return self.bid_order('limit', coin_amount=coin_amount, price=price)
+        return self.bid_order('limit', coin_amount=coin_amount, price=price, currency_pair="btc_krw")
 
-    def ask_order(self, ask_type, coin_amount, price=0):
+    def ask_order(self, ask_type, coin_amount, price=None, currency_pair="btc_krw"):
         payload = {
             'type': ask_type,
+            'currency_pair': currency_pair,
             'price': price,
             'coin_amount': coin_amount,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/orders/sell"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/orders/sell", headers=self.headers, data=payload)
 
-    def market_ask_order(self, coin_amount):
-        return self.ask_order('market', coin_amount)
+    def market_ask_order(self, coin_amount, currency_pair="btc_krw"):
+        return self.ask_order('market', coin_amount, currency_pair)
 
-    def limit_ask_order(self, coin_amount, price):
-        return self.ask_order('limit', coin_amount, price)
+    def limit_ask_order(self, coin_amount, price, currency_pair="btc_krw"):
+        return self.ask_order('limit', coin_amount, price, currency_pair)
 
-    def cancel_order(self, ids):
+    def cancel_order(self, ids, currency_pair="btc_krw"):
         payload = {
             'id': ids,
+            'currency_pair': currency_pair,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/orders/cancel"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/orders/cancel", headers=self.headers, data=payload)
 
     def list_open_orders(self, offset=0, limit=10):
         params = {
@@ -103,26 +96,32 @@ class PrivateAPI(PublicAPI):
             'limit': limit,
             'nonce': self.nonce
         }
-        response = requests.get(urljoin(self.host, "user/orders/open"), params=params, headers=self.headers)
-        return response.json()
+        return self.request_get("user/orders/open", headers=self.headers, params=params)
 
-    def transaction_history(self, category="", offset=0, limit=10, order_id=0):
-        # TODO: make use custom parameter
-        response = requests.get(urljoin(self.host, "user/transactions"), params=self.nonce_params, headers=self.headers)
-        return response.json()
+    def transaction_history(self, offset=0, limit=10, currency_pair="btc_krw"):
+        # not support category & order_id
+        params = {
+            'offset': offset,
+            'limit': limit,
+            'nonce': self.nonce,
+            'currency_pair': currency_pair
+        }
+        return self.request_get("user/transactions", headers=self.headers, params=params)
 
     # https://apidocs.korbit.co.kr/#wallet
-    def retrieve_wallet_status(self):
-        response = requests.get(urljoin(self.host, "user/wallet"), params=self.nonce_params, headers=self.headers)
-        return response.json()
+    def retrieve_wallet_status(self, currency_pair="btc_krw"):
+        params = {
+            'currency_pair': currency_pair,
+            'nonce': self.nonce
+        }
+        return self.request_get("user/wallet", headers=self.headers, params=params)
 
     def assign_btc_address(self, currency="btc"):
         payload = {
             'currency': currency,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/coins/address/assign"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/coins/address/assign", headers=self.headers, data=payload)
 
     def request_btc_withdrawal(self, address, amount, currency="btc"):
         payload = {
@@ -131,24 +130,22 @@ class PrivateAPI(PublicAPI):
             'currency': currency,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/coins/out"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/coins/out", headers=self.headers, data=payload)
 
-    def status_of_btc_deposit_and_transfer(self, id="", currency="btc"):
+    def status_of_btc_deposit_and_transfer(self, transfer_id="", currency="btc"):
         params = {
             'currency': currency,
             'nonce': self.nonce
         }
-        if id != "":
-            params['id'] = id
-        response = requests.get(urljoin(self.host, "user/coins/status"), params=params, headers=self.headers)
-        return response.json()
+        if transfer_id != "":
+            params['id'] = transfer_id
 
-    def cancel_btc_transfer_request(self, id, currency="btc"):
+        return self.request_get("user/coins/status", headers=self.headers, params=params)
+
+    def cancel_btc_transfer_request(self, transfer_id, currency="btc"):
         payload = {
-            'id': id,
+            'id': transfer_id,
             'currency': currency,
             'nonce': self.nonce
         }
-        response = requests.post(urljoin(self.host, "user/coins/out/cancel"), data=payload, headers=self.headers)
-        return response.json()
+        return self.request_post("user/coins/out/cancel", headers=self.headers, data=payload)
