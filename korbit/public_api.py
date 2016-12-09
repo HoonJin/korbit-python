@@ -14,33 +14,43 @@ class PublicAPI:
                       or "https://api.korbit-test.com/%s/" % version
 
     # https://apidocs.korbit.co.kr/#public
-    def ticker(self):
-        response = requests.get(urljoin(self.host, "ticker"))
+    def ticker(self, currency_pair='btc_krw'):
+        params = {
+            'currency_pair': currency_pair
+        }
+        response = requests.get(urljoin(self.host, "ticker"), params=params)
         return response.json()
 
-    def detailed_ticker(self):
-        response = requests.get(urljoin(self.host, "ticker/detailed"))
+    def detailed_ticker(self, currency_pair='btc_krw'):
+        params = {
+            'currency_pair': currency_pair
+        }
+        response = requests.get(urljoin(self.host, "ticker/detailed"), params=params)
+        print(response.url)
         return response.json()
 
-    def orderbook(self, category="all", group=True):
+    def orderbook(self, currency_pair='btc_krw', category="all", group=True):
         params = {
             'group': group,
-            'category': category
+            'category': category,
+            'currency_pair': currency_pair
         }
         response = requests.get(urljoin(self.host, "orderbook"), params=params)
         return response.json()
 
-    def bids_orderbook(self, group=True):
-        return self.orderbook("bid", group)
+    def bids_orderbook(self, currency_pair='btc_krw', group=True):
+        return self.orderbook(currency_pair=currency_pair, category="bid", group=group)
 
-    def asks_orderbook(self, group=True):
-        return self.orderbook("ask", group)
+    def asks_orderbook(self, currency_pair='btc_krw', group=True):
+        return self.orderbook(currency_pair=currency_pair, category="ask", group=group)
 
-    def list_of_filled_orders(self, interval="hour"):
+    def list_of_filled_orders(self, currency_pair="btc_krw", interval="hour"):
         params = {
-            'time': interval
+            'time': interval,
+            'currency_pair': currency_pair
         }
         response = requests.get(urljoin(self.host, "transactions"), params=params)
+        print(response.url)
         return response.json()
 
     def constants(self):
