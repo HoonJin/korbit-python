@@ -60,11 +60,11 @@ class PrivateAPI(PublicAPI):
         }
         return self.request_post("user/orders/buy", headers=self.headers, data=payload)
 
-    def market_bid_order(self, fiat_amount):
-        return self.bid_order('market', fiat_amount=fiat_amount, currency_pair="btc_krw")
+    def market_bid_order(self, fiat_amount, currency_pair="btc_krw"):
+        return self.bid_order('market', fiat_amount=fiat_amount, currency_pair=currency_pair)
 
-    def limit_bid_order(self, coin_amount, price):
-        return self.bid_order('limit', coin_amount=coin_amount, price=price, currency_pair="btc_krw")
+    def limit_bid_order(self, coin_amount, price, currency_pair="btc_krw"):
+        return self.bid_order('limit', coin_amount=coin_amount, price=price, currency_pair=currency_pair)
 
     def ask_order(self, ask_type, coin_amount, price=None, currency_pair="btc_krw"):
         payload = {
@@ -77,7 +77,7 @@ class PrivateAPI(PublicAPI):
         return self.request_post("user/orders/sell", headers=self.headers, data=payload)
 
     def market_ask_order(self, coin_amount, currency_pair="btc_krw"):
-        return self.ask_order('market', coin_amount, currency_pair)
+        return self.ask_order('market', coin_amount=coin_amount, currency_pair=currency_pair)
 
     def limit_ask_order(self, coin_amount, price, currency_pair="btc_krw"):
         return self.ask_order('limit', coin_amount, price, currency_pair)

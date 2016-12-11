@@ -1,6 +1,7 @@
 import unittest
 import korbit
 
+
 class TestKorbit(unittest.TestCase):
     def setUp(self):
         pass

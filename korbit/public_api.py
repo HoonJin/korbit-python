@@ -7,7 +7,7 @@ try:
 except ImportError:
     from urlparse import urljoin
 
-TIMEOUT = 5
+TIMEOUT = 10
 
 
 class PublicAPI:
