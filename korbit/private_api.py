@@ -45,7 +45,7 @@ class PrivateAPI(PublicAPI):
     def headers(self):
         return {
             'Accept': 'application/json',
-            'Authorization': "%s %s" % (self.__token['token_type'], self.__token['access_token'])
+            'Authorization': "{} {}".format(self.__token['token_type'], self.__token['access_token'])
         }
 
     # https://apidocs.korbit.co.kr/#exchange
