@@ -87,8 +87,9 @@ class PrivateAPI(PublicAPI):
         }
         return self.request_post("user/orders/cancel", headers=self.headers, data=payload)
 
-    def list_open_orders(self, offset=0, limit=10):
+    def list_open_orders(self, offset=0, limit=10, currency_pair="btc_krw"):
         params = {
+            'currency_pair': currency_pair,
             'offset': offset,
             'limit': limit
         }
