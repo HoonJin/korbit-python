@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import time
 try:
     from urllib.parse import urljoin
 except ImportError:
@@ -63,7 +62,3 @@ class PublicAPI:
     @property
     def host(self):
         return self.__host
-
-    @property
-    def nonce(self):
-        return int(time.time() * 1000)

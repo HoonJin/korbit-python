@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import time
 from .public_api import PublicAPI
 
 
@@ -36,10 +36,7 @@ class PrivateAPI(PublicAPI):
         return self.__token
 
     def get_user_info(self):
-        params = {
-            'nonce': self.nonce
-        }
-        return self.request_get("user/info", headers=self.headers, params=params)
+        return self.request_get("user/info", headers=self.headers)
 
     @property
     def headers(self):
@@ -93,8 +90,7 @@ class PrivateAPI(PublicAPI):
     def list_open_orders(self, offset=0, limit=10):
         params = {
             'offset': offset,
-            'limit': limit,
-            'nonce': self.nonce
+            'limit': limit
         }
         return self.request_get("user/orders/open", headers=self.headers, params=params)
 
@@ -103,16 +99,20 @@ class PrivateAPI(PublicAPI):
         params = {
             'offset': offset,
             'limit': limit,
-            'nonce': self.nonce,
             'currency_pair': currency_pair
         }
         return self.request_get("user/transactions", headers=self.headers, params=params)
 
+    def trading_volume_and_fees(self, currency_pair="all"):
+        params = {
+            'currency_pair': currency_pair
+        }
+        return self.request_get("user/volume", headers=self.headers, params=params)
+
     # https://apidocs.korbit.co.kr/#wallet
     def retrieve_wallet_status(self, currency_pair="btc_krw"):
         params = {
-            'currency_pair': currency_pair,
-            'nonce': self.nonce
+            'currency_pair': currency_pair
         }
         return self.request_get("user/wallet", headers=self.headers, params=params)
 
@@ -134,8 +134,7 @@ class PrivateAPI(PublicAPI):
 
     def status_of_btc_deposit_and_transfer(self, transfer_id="", currency="btc"):
         params = {
-            'currency': currency,
-            'nonce': self.nonce
+            'currency': currency
         }
         if transfer_id != "":
             params['id'] = transfer_id
@@ -149,3 +148,7 @@ class PrivateAPI(PublicAPI):
             'nonce': self.nonce
         }
         return self.request_post("user/coins/out/cancel", headers=self.headers, data=payload)
+
+    @property
+    def nonce(self):
+        return int(time.time() * 1000)
