@@ -25,6 +25,9 @@ class PrivateAPI(PublicAPI):
         self.__token = self.request_post("oauth2/access_token", data=payload)
         return self.__token
 
+    def set_token(self, token):
+        self.__token = token
+
     def refresh_token(self):
         payload = {
             'client_id': self.__client_id,
