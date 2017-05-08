@@ -4,11 +4,11 @@ from .public_api import PublicAPI
 
 
 class PrivateAPI(PublicAPI):
-    def __init__(self, client_id, secret, production=True, version="v1"):
+    def __init__(self, client_id, secret, production=True, version="v1", timeout=20):
         try:
-            super(self.__class__, self).__init__(production, version)
+            super(self.__class__, self).__init__(production, version, timeout)
         except TypeError:
-            PublicAPI.__init__(self, production, version)
+            PublicAPI.__init__(self, production, version, timeout)
         self.__client_id = client_id
         self.__secret = secret
         self.__token = {}
