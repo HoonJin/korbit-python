@@ -98,14 +98,21 @@ class PrivateAPI(PublicAPI):
         }
         return self.request_get("user/orders/open", headers=self.headers, params=params)
 
-    def transaction_history(self, offset=0, limit=10, currency_pair="btc_krw"):
-        # not support category & order_id
+    def view_exchange_orders(self, offset=0, limit=10, currency_pair="btc_krw"):
         params = {
+            'currency_pair': currency_pair,
             'offset': offset,
-            'limit': limit,
-            'currency_pair': currency_pair
+            'limit': limit
         }
-        return self.request_get("user/transactions", headers=self.headers, params=params)
+        return self.request_get("user/orders", headers=self.headers, params=params)
+
+    def view_transfers(self, offset=0, limit=10, currency="btc"):
+        params = {
+            'currency': currency,
+            'offset': offset,
+            'limit': limit
+        }
+        return self.request_get("user/transfers", headers=self.headers, params=params)
 
     def trading_volume_and_fees(self, currency_pair="all"):
         params = {
@@ -114,6 +121,12 @@ class PrivateAPI(PublicAPI):
         return self.request_get("user/volume", headers=self.headers, params=params)
 
     # https://apidocs.korbit.co.kr/#wallet
+    def user_balances(self):
+        return self.request_get("user/balances", headers=self.headers)
+
+    def user_accounts(self):
+        return self.request_get("user/accounts", headers=self.headers)
+
     def retrieve_wallet_status(self, currency_pair="btc_krw"):
         params = {
             'currency_pair': currency_pair

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import requests
+import json
+import logging
 try:
     from urllib.parse import urljoin
 except ImportError:
@@ -52,11 +54,19 @@ class PublicAPI:
 
     def request_get(self, path, headers=None, params=None):
         response = requests.get(urljoin(self.host, path), headers=headers, params=params, timeout=self.__timeout)
-        return response.json()
+        try:
+            return response.json()
+        except json.decoder.JSONDecodeError as e:
+            logging.error("exception: {}, response_text: {}".format(e, response.text))
+            return response.text
 
     def request_post(self, path, headers=None, data=None):
         response = requests.post(urljoin(self.host, path), headers=headers, data=data, timeout=self.__timeout)
-        return response.json()
+        try:
+            return response.json()
+        except json.decoder.JSONDecodeError as e:
+            logging.error("exception: {}, response_text: {}".format(e, response.text))
+            return response.text
 
     @property
     def host(self):
