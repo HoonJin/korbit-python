@@ -30,7 +30,7 @@ api.market_ask_order(0.01)
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2016-2017 HoonJin(Daniel) Ji bwjhj1030@gmail.com
+Copyright (c) 2016-2019 HoonJin(Daniel) Ji bwjhj1030@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

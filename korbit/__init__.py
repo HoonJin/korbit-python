@@ -5,6 +5,7 @@ from .private_api import PrivateAPI, PublicAPI
 __public = PublicAPI()
 ticker = __public.ticker
 detailed_ticker = __public.detailed_ticker
+all_detailed_ticker = __public.all_detailed_ticker
 orderbook = __public.orderbook
 asks_orderbook = __public.asks_orderbook
 bids_orderbook = __public.bids_orderbook

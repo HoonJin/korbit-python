@@ -7,7 +7,7 @@ except ImportError:
 setup(
     name='korbit-python',
     packages=['korbit'],
-    version='0.5.0',
+    version='0.5.1',
     description='korbit API wrapper for Python',
     url='http://github.com/Hoonjin/korbit-python/',
     author='Daniel Ji',

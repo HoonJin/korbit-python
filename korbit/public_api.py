@@ -28,6 +28,9 @@ class PublicAPI:
         }
         return self.request_get("ticker/detailed", params=params)
 
+    def all_detailed_ticker(self):
+        return self.request_get("ticker/detailed/all")
+
     def orderbook(self, currency_pair="btc_krw", category="all", group=True):
         params = {
             'group': group,
