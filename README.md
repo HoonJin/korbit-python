@@ -21,7 +21,7 @@ You have to get API key in [this page](https://www.korbit.co.kr/settings/api)
 ```python
 import korbit
 api = korbit.PrivateAPI('your key', 'your secret')
-api.create_token_directly('your email', 'your pa$$w0rd')
+api.create_token_directly()
 
 api.market_ask_order(0.01)
 ```

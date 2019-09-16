@@ -14,13 +14,11 @@ class PrivateAPI(PublicAPI):
         self.__token = {}
 
     # https://apidocs.korbit.co.kr/#authentication
-    def create_token_directly(self, username, password):
+    def create_token_directly(self):
         payload = {
             'client_id': self.__client_id,
             'client_secret': self.__secret,
-            'username': username,
-            'password': password,
-            'grant_type': "password"
+            'grant_type': "client_credentials"
         }
         self.__token = self.request_post("oauth2/access_token", data=payload)
         return self.__token
