@@ -17,7 +17,7 @@ korbit.ticker()
 ```
 
 ## If you want to use Exchange
-You have to get API key in [this page](https://www.korbit.co.kr/settings/api)
+You have to get API key in [this page](https://www.korbit.co.kr/my/api)
 ```python
 import korbit
 api = korbit.PrivateAPI('your key', 'your secret')
