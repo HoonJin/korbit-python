@@ -52,9 +52,6 @@ class PublicAPI:
         }
         return self.request_get("transactions", params=params)
 
-    def constants(self):
-        return self.request_get("constants")
-
     def request_get(self, path, headers=None, params=None):
         response = requests.get(urljoin(self.host, path), headers=headers, params=params, timeout=self.__timeout)
         try:
